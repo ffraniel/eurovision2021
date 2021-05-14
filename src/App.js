@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Link,
@@ -11,8 +10,6 @@ import Leaderboard from './pages/Leaderboard';
 import Artists from './pages/Artists';
 
 export default function App() {
-
-  const [isShowingAllArtists, setIsShowingAllArtists] = useState(true);
 
   return (
     <div>
@@ -43,10 +40,7 @@ export default function App() {
               <Leaderboard />
             </Route>
             <Route path="/artists">
-              <Artists 
-                isShowingAllArtists={isShowingAllArtists}
-                setIsShowingAllArtists={setIsShowingAllArtists}
-              />
+              <Artists />
             </Route>
             <Route path="/" exact>
               <Home />

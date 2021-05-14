@@ -4,11 +4,12 @@ import OneArtist from '../components/OneArtist';
 import randomise from '../utility/randomise';
 import rawArtistData from '../data/artistData';
 
-const Artists = ({isShowingAllArtists, setIsShowingAllArtists}) => {
+const Artists = () => {
 
   const [currentArtist, setCurrentArtist] = useState(0);
   const [artistData, setArtistData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isShowingAllArtists, setIsShowingAllArtists] = useState(true);
 
   useEffect(()=>{
     let randomisedArtists = randomise(rawArtistData);
@@ -34,13 +35,17 @@ const Artists = ({isShowingAllArtists, setIsShowingAllArtists}) => {
   };
 
   const activeClasses = "px-4 py-2 rounded bg-green-300";
-  const inActiveClasses = "px-4 py-2 rounded bg-gray-200";
+  const inactiveClasses = "px-4 py-2 rounded bg-gray-200";
 
   const artistDisplayToggle = isShowingAllArtists ? 
-    <AllArtists artistData={artistData} /> : 
+    <AllArtists 
+      artistData={artistData}
+      setCurrentArtist={setCurrentArtist}
+      setIsShowingAllArtists={setIsShowingAllArtists}
+    /> : 
     <OneArtist 
       artistData={artistData} 
-      currentArtist={currentArtist} 
+      currentArtist={currentArtist}
       artistNext={artistNext} 
       artistPrevious={artistPrevious} 
     />;
@@ -49,9 +54,9 @@ const Artists = ({isShowingAllArtists, setIsShowingAllArtists}) => {
       <>
         <div>
           <button 
-            className={isShowingAllArtists ? activeClasses : inActiveClasses} onClick={()=>{setIsShowingAllArtists(true)}}>All</button>
+            className={isShowingAllArtists ? activeClasses : inactiveClasses} onClick={()=>{setIsShowingAllArtists(true)}}>All</button>
           <button 
-            className={!isShowingAllArtists ? activeClasses : inActiveClasses} onClick={()=>{setIsShowingAllArtists(false)}}>One</button>
+            className={!isShowingAllArtists ? activeClasses : inactiveClasses} onClick={()=>{setIsShowingAllArtists(false)}}>One</button>
         </div>
         {!artistData && <h1>loading</h1>}
         {artistData && artistData.length > 0 &&
