@@ -34,8 +34,8 @@ const Artists = () => {
     }
   };
 
-  const activeClasses = "px-4 py-2 rounded bg-green-300";
-  const inactiveClasses = "px-4 py-2 rounded bg-gray-200";
+  const activeClasses = "px-4 py-2 rounded bg-green-500 hover:bg-green-400";
+  const inactiveClasses = "px-4 py-2 rounded bg-gray-200 hover:bg-gray-300";
 
   const artistDisplayToggle = isShowingAllArtists ? 
     <AllArtists 
@@ -51,18 +51,20 @@ const Artists = () => {
     />;
 
     return (
-      <>
-        <div>
+      <div className="container px-12 mx-auto">
+        <div className="flex my-4">
           <button 
             className={isShowingAllArtists ? activeClasses : inactiveClasses} onClick={()=>{setIsShowingAllArtists(true)}}>All</button>
           <button 
             className={!isShowingAllArtists ? activeClasses : inactiveClasses} onClick={()=>{setIsShowingAllArtists(false)}}>One</button>
         </div>
-        {!artistData && <h1>loading</h1>}
+
+        {!artistData && <h1 className="text-gray-100">loading</h1>}
+
         {artistData && artistData.length > 0 &&
          artistDisplayToggle
         }
-      </>
+      </div>
     );
 }
 

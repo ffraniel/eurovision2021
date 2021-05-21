@@ -1,8 +1,25 @@
 import React, { useState, useEffect } from "react";
+import LeaderboardElement from '../components/LeaderboardElement';
 
 const Leaderboard = () => { 
 
+  const tempLeaders = [{
+    name: "bob24242",
+    score: 8,
+    date: '17/05/21'
+  }, {
+    name: "elena",
+    score: 3.,
+    date: "17/05/21"
+  }, {
+    name: "larry",
+    score: 2,
+    date: "17/05/21"
+    }
+  ];
+
   const [whichQuiz, setWhichQuiz] = useState(5);
+  const [leaders, setLeaders] = useState(tempLeaders)
 
   useEffect(()=>{
     console.log("make fetch with ", whichQuiz);
@@ -15,38 +32,15 @@ const Leaderboard = () => {
   }; 
 
   return (
-    <div className="">
-      <h3>Leaderboard</h3>
-      <h4>Showing Results for {whichQuiz} Question Quizes</h4>
-      <select value={whichQuiz} onChange={e => changeWhichQuiz(e.target.value)}>
+    <div className="container px-12 mx-auto text-gray-100 my-4">
+      <h1 className="text-2xl">Leaderboard</h1>
+      <h4 className="mt-2">Showing Results for {whichQuiz} Question Quizes</h4>
+      <select className="text-black text-xl mt-2" value={whichQuiz} onChange={e => changeWhichQuiz(e.target.value)}>
         <option value={5}>5</option>
         <option value={10}>10</option>
         <option value={15}>15</option>
       </select>
-      <div className="">
-        <div className="flex">
-            <span>name</span>
-            <span>score</span>
-            <span>date</span>
-        </div>
-        <ul className="">
-          <li className="flex">
-            <span>Tony 1</span>
-            <span>3</span>
-            <span>12/05/21</span>
-          </li>
-          <li className="flex">
-            <span>Linda</span>
-            <span>2</span>
-            <span>03/05/21</span>
-          </li>
-          <li className="flex">
-            <span>Roger</span>
-            <span>8</span>
-            <span>14/05/21</span>
-          </li>
-        </ul>
-      </div>
+      <LeaderboardElement leaders={leaders} numberOfRounds={whichQuiz}/>
     </div>
   );
 }

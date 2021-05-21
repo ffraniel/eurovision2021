@@ -21,37 +21,39 @@ export default function App({
   return (
     <div class="container">
 
-      <article>
-        <figure>
+      <article className="bg-gray-200 rounded overflow-hidden">
+        <figure className="relative">
           <Images
             src={artist.artistImg} 
             alt={'"' + artist.song + '" by ' + artist.artist + " from " + artist.country} 
-            classNames={"rounded-md"} 
+            classNames={"w-full lg:max-w-3xl mx-auto"} 
           />
-          <Images 
-            src={artist.lilFlag}
-            alt={"Flag of " + artist.country}
-            className={"h-12 w-12"}
-          />
+          <div className="bg-gray-200 shadow-sm text-blue-900 rounded-full inline-flex items-center h-6 absolute -bottom-2 right-2">
+            <h3 className="inline px-2 text-sm font-bold ">{artist.country}</h3>
+            <Images 
+              src={artist.lilFlag}
+              alt={"Flag of " + artist.country}
+              classNames={"h-4 w-4 inline ml-auto mr-2"}
+            />
+          </div>
         </figure>
-        <div className="">
-          <h3>{artist.song}</h3>
-          <h3>
+        <div className="text-gray-100">
+          <h3 className="text-gray-100 mx-4 text-gray-700">{artist.song}</h3>
+          <h3 className="mx-4 text-gray-600">
             <a href={artist.artistLink}>
               {artist.artist}
             </a>
           </h3>
-          <h3>{artist.country}</h3>
         </div>
-        <div className="">
-          <p className="">{artist.blurb}</p>
+        <div className="mx-4">
+          <p className="text-gray-700">{artist.blurb}</p>
         </div>
-        <p>current artist number {currentArtist + 1} / {artistData.length}</p>
+        <p className="text-gray-900 mx-4 flex justify-center my-2">{currentArtist + 1} / {artistData.length}</p>
       </article>
 
-      <div className="flex">
-        <button onClick={artistPrevious}>Previous</button>
-        <button onClick={artistNext}>Next</button>
+      <div className="flex justify-center my-2">
+        <button className="bg-green-500 text-gray-100 hover:bg-green-700 py-1 px-2 rounded mx-2" onClick={artistPrevious}>Previous</button>
+        <button className="bg-green-500 text-gray-100 hover:bg-green-700 py-1 px-2 rounded mx-2" onClick={artistNext}>Next</button>
       </div>
     </div>
   );

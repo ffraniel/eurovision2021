@@ -20,20 +20,13 @@ const QuestionsElement = ({questionList, numberOfRounds, round, setRound, resetG
     let fourOptions = randomise([questionList[round], ...getAlternativeAnswers(songList, answerCountry)]);
     setCurrentQuestionList(fourOptions);
     setLoading(false);
-  }, [])
+  }, [round])
 
   const nextQuestion = (e) => {
     e.preventDefault();
     setRound(prevRound => prevRound + 1);
     setHasAnswered(false);
     setGivenAnswer(null);
-    setLoading(true);
-
-    setSnippet(snippetGenerator(questionList[round].lyrics));
-    let fourOptions = randomise([questionList[round], ...getAlternativeAnswers(songList, answerCountry)]);
-    setCurrentQuestionList(fourOptions);
-
-    setLoading(false);
   }
 
   const handleAnswer = (choice) => {
@@ -47,36 +40,49 @@ const QuestionsElement = ({questionList, numberOfRounds, round, setRound, resetG
     }
   }
 
+  const hasAnsweredMessage = () => {
+    return (
+      <h1 className={`${questionList[round].country === givenAnswer.country ? 'text-green-500' : ' text-red-500'} text-2xl`}>
+        {questionList[round].country === givenAnswer.country ? 
+          'CORRECT!!!' : 
+          `WRONG, sorry, it was ${questionList[round].country}!`}
+      </h1>
+      );
+  }
+
   return (
-    <div>
-      <h3>Round {round + 1} of {numberOfRounds}</h3>
-      <h4>Points {points}</h4>
+    <div className="text-center text-gray-100">
+      <h3 className="text-gray-100 text-xl" >Round {round + 1} of {numberOfRounds}</h3>
+      <h4 className="mt-2 text-xl">Points 
+        <span className="text-red-400 "> {points}</span>
+      </h4>
+      <h5>Time {}</h5>
       {loading && <h1>LOADING!!</h1>}
 
       {!loading && currentQuestionList && snippet.length > 0 &&
-      <div className="">
-        <h3>{snippet}....</h3>
+      <div className="mt-4">
+        <h3 className="max-w-lg mx-auto">...{snippet}....</h3>
         <div className="h-24">
-          {hasAnswered && <h1>{questionList[round].country === givenAnswer.country ? 'CORRECT!!!' : `WRONG, sorry, it was ${questionList[round].country}!`}</h1>}
+          {hasAnswered && hasAnsweredMessage()}
         </div>
-        <div className="flex w-1/2 mx-auto border border-red-400">
+        <div className="flex w-1/2 mx-auto">
         {currentQuestionList.map(option => {
             return (
               <button 
                 disabled={hasAnswered} 
-                className={`${hasAnswered ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-400'} px-2 py-1 text-gray-100 rounded-md mx-1 w-1/2`}
+                className={`${hasAnswered ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-400'} px-2 py-1 text-gray-100 rounded-md mx-1 leading-tight w-1/2`}
                 onClick={(e)=>{
                   e.preventDefault();
                   handleAnswer(option);
                 }}>
-                  {option.country}
+                  {option.country} {questionList[round].country === option.country ? '*': ''}
               </button>
             );
         })
         }
         </div>
         <div className="flex w-1/2 mx-auto my-4">
-          <button className="bg-red-500 hover:bg-red-400 px-2 py-1 text-gray-100 rounded-md mx-1 w-1/2" onClick={resetGame}>Reset Game</button>
+          <button className="bg-red-500 hover:bg-red-400 px-2 py-1 text-gray-100 rounded-md mx-1" onClick={resetGame}>Restart</button>
           {hasAnswered && <button className="bg-green-500 hover:bg-green-400 px-2 py-1 text-gray-100 rounded-md mx-1 w-1/2" onClick={nextQuestion}>Next</button>}
         </div>
       </div>
