@@ -29,7 +29,7 @@ const Game = () => {
   }
 
   return (
-    <section className="container my-0 mx-auto py-10">
+    <section className="container my-0 mx-auto py-2">
       {!numberOfRounds && 
       
         <div className="text-center">

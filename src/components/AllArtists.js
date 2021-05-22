@@ -11,7 +11,7 @@ export default function AllArtists({artistData, setCurrentArtist, setIsShowingAl
       <div className="mt-2">
         <ul className="block lg:grid lg:grid-cols-4 lg:gap-2 ">
           {artistData.map((artist, i) => (
-            <li className="mt-6 lg:mt-0 block bg-blue-100 text-gray-800 rounded-lg hover:bg-blue-400 group" onClick={()=>{handleSelectArtist(i)}}>
+            <li className="mt-6 pb-4 lg:mt-0 block bg-blue-100 text-gray-800 rounded-lg hover:bg-blue-400 group" onClick={()=>{handleSelectArtist(i)}}>
               <figure className="relative" >
                 <Images
                   src={artist.artistImg} 
@@ -28,8 +28,8 @@ export default function AllArtists({artistData, setCurrentArtist, setIsShowingAl
 
                 </div>
               </figure>
-              <h1 className="text-xl ml-1 transform group-hover:translate-x-1 ">{artist.artist}</h1>
-              <h3 className="text-lg ml-1">{artist.song}</h3>
+              <h1 className="mt-4 text-xl ml-2 font-bold">{artist.artist}</h1>
+              <h3 className="text-xl ml-2 text-gray-700">{artist.song}</h3>
 
             </li>
           ))}

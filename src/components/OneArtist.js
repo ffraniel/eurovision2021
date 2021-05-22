@@ -38,12 +38,11 @@ export default function App({
           </div>
         </figure>
         <div className="text-gray-100">
-          <h3 className="text-gray-100 mx-4 text-gray-700">{artist.song}</h3>
-          <h3 className="mx-4 text-gray-600">
-            <a href={artist.artistLink}>
+          <h3 className="mx-4 text-gray-700 font-bold text-3xl inline">
+            <span className="text-gray-800">{artist.song}</span> by <a className="underline" href={artist.artistLink}>
               {artist.artist}
-            </a>
-          </h3>
+            </a></h3>
+
         </div>
         <div className="mx-4">
           <p className="text-gray-700">{artist.blurb}</p>

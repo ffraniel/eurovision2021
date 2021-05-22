@@ -3,6 +3,7 @@ import snippetGenerator from '../utility/snippetGenerator';
 import getAlternativeAnswers from '../utility/getAlternativeAnswers';
 import randomise from '../utility/randomise';
 import songList from '../data/artistData.json';
+import Images from './Images';
 
 const QuestionsElement = ({questionList, numberOfRounds, round, setRound, resetGame, points, setPoints}) => {
 
@@ -11,6 +12,10 @@ const QuestionsElement = ({questionList, numberOfRounds, round, setRound, resetG
   const [snippet, setSnippet] = useState(null);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [givenAnswer, setGivenAnswer] = useState(null);
+  const [timeTaken, setTimeTaken] = useState(null);
+  const [counter, setCounter] = useState(0);
+  const [startTime, setStartTime] = useState(Date.now());
+  const [pointsThisRound, setPointsThisRound] = useState(null);
 
   let answerCountry = questionList[round].country;
 
@@ -20,68 +25,105 @@ const QuestionsElement = ({questionList, numberOfRounds, round, setRound, resetG
     let fourOptions = randomise([questionList[round], ...getAlternativeAnswers(songList, answerCountry)]);
     setCurrentQuestionList(fourOptions);
     setLoading(false);
-  }, [round])
+  }, [round, answerCountry, questionList]);
+
+
+  // Third Attempts
+  useEffect(() => {
+    var timer;
+    if (!hasAnswered) {
+      setTimeout(() => setCounter(counter + 1), 1000);
+    } 
+
+    return () => clearInterval(timer);
+  }, [counter]);
 
   const nextQuestion = (e) => {
     e.preventDefault();
     setRound(prevRound => prevRound + 1);
     setHasAnswered(false);
     setGivenAnswer(null);
+    setCounter(0);
+    setStartTime(Date.now());
+    setPointsThisRound(0);
   }
 
   const handleAnswer = (choice) => {
-    console.log("has answered? ", hasAnswered)
     if (!hasAnswered) {
       setHasAnswered(true);
+
       setGivenAnswer(choice);
+
+      let timerDuration = Date.now() - startTime;
+      setTimeTaken(timerDuration / 1000);
+
+      let pointsThisRoundCalc = 10000 - timerDuration > 0 ? 11000 - timerDuration: 1000;
+      console.log(pointsThisRoundCalc);
       if (choice.country === questionList[round].country) {
-        setPoints(prevPoints => prevPoints + 1);
+        setPointsThisRound(pointsThisRoundCalc);
+        setPoints(prevPoints => prevPoints + pointsThisRoundCalc);
       }
     }
   }
 
   const hasAnsweredMessage = () => {
     return (
-      <h1 className={`${questionList[round].country === givenAnswer.country ? 'text-green-500' : ' text-red-500'} text-2xl`}>
-        {questionList[round].country === givenAnswer.country ? 
-          'CORRECT!!!' : 
-          `WRONG, sorry, it was ${questionList[round].country}!`}
-      </h1>
+      <div className="">
+        <h1 className={`${questionList[round].country === givenAnswer.country ? 
+          'text-green-600' : 
+          ' text-red-600'} 
+          text-3xl font-extrabold`}>
+          {questionList[round].country === givenAnswer.country ? 
+            'CORRECT!!!' : 
+            `WRONG!!!!`}
+        </h1>
+        <h3 className="my-4">
+          <img className="inline mx-2" src={questionList[round].lilFlag} alt={questionList[round].country + "'s flag"} />
+          It was {questionList[round].country}!
+          <img className="inline mx-2" src={questionList[round].lilFlag} alt={questionList[round].country + "'s flag"} />
+        </h3>
+        <Images src={questionList[round].artistImg} alt={questionList[round].country} classNames={'object-cover w-1/2 mx-auto'} />
+      </div>
       );
   }
 
   return (
     <div className="text-center text-gray-100">
       <h3 className="text-gray-100 text-xl" >Round {round + 1} of {numberOfRounds}</h3>
-      <h4 className="mt-2 text-xl">Points 
-        <span className="text-red-400 "> {points}</span>
+      <h4 className="mt-2 text-xl">Score 
+        <span className="text-red-500 font-bold"> {points}</span>
       </h4>
-      <h5>Time {}</h5>
+      {hasAnswered && pointsThisRound && <h3>++ {pointsThisRound} points</h3>}
+      {!hasAnswered && <h5>Time {counter}</h5>}
+      {hasAnswered && <h5>Time {timeTaken}</h5>}
       {loading && <h1>LOADING!!</h1>}
 
       {!loading && currentQuestionList && snippet.length > 0 &&
       <div className="mt-4">
-        <h3 className="max-w-lg mx-auto">...{snippet}....</h3>
-        <div className="h-24">
+        <h3 className="max-w-lg mx-auto px-4">...{snippet}....</h3>
+        <div className="py-4">
           {hasAnswered && hasAnsweredMessage()}
         </div>
-        <div className="flex w-1/2 mx-auto">
+        <div className="flex md:w-1/2 mx-auto">
         {currentQuestionList.map(option => {
             return (
               <button 
                 disabled={hasAnswered} 
-                className={`${hasAnswered ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-400'} px-2 py-1 text-gray-100 rounded-md mx-1 leading-tight w-1/2`}
+                className={`${hasAnswered ? 
+                  'bg-gray-400' : 
+                  'bg-green-500 hover:bg-green-400'} 
+                  px-2 py-2 text-gray-100 rounded-md mx-1 leading-tight w-1/4  md:w-1/2`}
                 onClick={(e)=>{
                   e.preventDefault();
                   handleAnswer(option);
                 }}>
-                  {option.country} {questionList[round].country === option.country ? '*': ''}
+                  {option.country}
               </button>
             );
         })
         }
         </div>
-        <div className="flex w-1/2 mx-auto my-4">
+        <div className="mx-auto my-4">
           <button className="bg-red-500 hover:bg-red-400 px-2 py-1 text-gray-100 rounded-md mx-1" onClick={resetGame}>Restart</button>
           {hasAnswered && <button className="bg-green-500 hover:bg-green-400 px-2 py-1 text-gray-100 rounded-md mx-1 w-1/2" onClick={nextQuestion}>Next</button>}
         </div>

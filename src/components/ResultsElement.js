@@ -47,15 +47,15 @@ const ResultsElement = ({points, numberOfRounds, resetGame}) => {
 
   return (
     <div className="text-gray-100 text-center">
-      <h3 className="text-3xl md-text-4xl">You scored {points} / {numberOfRounds}</h3>
-      <p className="mt-4" >See how you ranked!</p>
+      <h3 className="text-3xl md-text-4xl">You scored {points}!</h3>
+      {/* <p className="mt-4" >See how you ranked!</p>
       {!hasSubmittedName &&
         <form className="mt-2" onSubmit={handleSubmit} >
           <input className="text-gray-800 px-2 py-1 rounded-sm" type="text" name="name" placeholder="name" value={userName} onChange={(e => {setUserName(e.target.value)})} />
           <input className="inline-block bg-gray-800 text-gray-100 px-2 py-1 rounded-sm" type="submit" value="Submit" />
         </form>
       }
-      <LeaderboardElement leaders={leaders} numberOfRounds={numberOfRounds} />
+      <LeaderboardElement leaders={leaders} numberOfRounds={numberOfRounds} /> */}
       <button className="bg-red-500 hover:bg-red-400 px-2 py-1 text-gray-100 rounded-md mx-1 my-6" onClick={resetGame}>Restart</button>
     </div>
   );
